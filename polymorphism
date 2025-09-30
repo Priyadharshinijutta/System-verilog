@@ -1,0 +1,39 @@
+virtual class shape;
+  int ra =2;
+  int ln=5;
+  int br= 6;
+  int ba=3;
+  int h=2;
+  pure virtual class area();
+  endclass
+  
+  class circle extends shape;
+    int carea;
+    function void area();
+      carea=3.12*ra;
+      $display("circle area=%0d",carea);
+    endfunction
+  endclass
+    class rectangle extends shape;
+    int rarea;
+    function void area();
+      rarea=ln*br;
+      $display("rectangle area=%0d",rarea);
+    endfunction
+    endclass
+      class triangle extends shape;
+    int tarea;
+    function void area();
+      tarea=0.5*ba*h;
+      $display("triangle area=%0d",tarea);
+    endfunction
+      endclass
+  module tb;
+    shape s[3];
+    initial begin
+      s[0]=circle::new();
+      s[1]=rectangle::new();
+      s[2]=triangle::new();
+      foreach(shape[i]) shape[i].area();
+      end
+  endmodule
