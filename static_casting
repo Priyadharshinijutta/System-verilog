@@ -1,0 +1,16 @@
+class ethernet_packet;
+  int a;
+endclass
+class good_ethernet_packet extends ethernet_packet;
+  int b;
+endclass
+module tb;
+  bit y;
+  ethernet_packet eth_pkt = new();
+  good_ethernet_packet g_pkt = new();
+  initial begin
+    $cast(eth_pkt,g_pkt);
+    y=$cast(eth_pkt,g_pkt);
+    $display("y=%0b",y);
+  end
+endmodule
