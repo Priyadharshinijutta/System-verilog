@@ -1,0 +1,23 @@
+module tb;
+  task one();
+    $display("Task one is started = %0t",$time);
+    #10;
+    $display("Task one is completed = %0t",$time);
+  endtask
+  task two();
+    $display("Task two is started = %0t",$time);
+    #30;
+    $display("Task two is completed = %0t",$time);
+  endtask
+  task three();
+    #10;
+    $display("Task three is started = %0t",$time);
+  endtask
+    initial begin
+      fork
+        three();
+      join_none
+      one();
+      two();
+    end
+endmodule
