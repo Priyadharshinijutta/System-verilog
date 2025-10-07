@@ -1,0 +1,46 @@
+class generator;
+  int a=3;
+  int b=5;
+  mailbox mbx;
+  task run();
+    mbx.put({a[2:0],b[2:0]});
+    $display("Generator Data a=%0d,Generator Data b=%0d", a,b);
+  endtask
+endclass
+
+class driver;
+  mailbox mbx;
+  virtual inter vif;
+  task run();
+    bit [5:0]temp;
+    bit [2:0]a,b;
+    mbx.get(temp);//Extarcting data from mailbox i.e., stored in data1
+    a=temp[5:3];
+    b=temp[2:0];
+    vif.a=a;
+    vif.b=b;
+    #10;
+    $display("Driver Received Data a=%0d,Driver Received Data b=%0d and DUT output=%0d", a,b,vif.c);
+  endtask
+endclass
+module tb;
+  inter aif();
+  top dut(.a(aif.a),.b(aif.b),.c(aif.c));
+  generator gen;
+  driver div;
+  mailbox mbx;
+  initial begin
+    gen=new();//creating memory
+    div=new();
+    mbx=new();
+ 
+    gen.mbx =mbx;//making sure that mbx and gen mbx are same
+    div.mbx=mbx;
+    div.vif=aif;
+    fork
+      gen.run();
+      div.run();
+    join
+  end
+ 
+endmodule
