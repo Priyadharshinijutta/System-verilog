@@ -1,0 +1,66 @@
+class generator;
+  bit a;
+  bit b;
+  mailbox mbx;
+  task run();
+    for(int i=0;i<=3;i++)begin
+      //a=i[1];
+      //b=i[0];
+      {a,b}=i;
+      mbx.put({a,b});
+      #10;
+      $display("a=%0b,b=%0b, time:%0t",a,b,$time);
+ 
+    end
+      endtask
+ endclass
+ class driver;
+   virtual inter vif;
+   mailbox mbx;
+   task run();
+     bit [1:0]temp;
+     bit a,b;
+     for(int i=0;i<4;i++)begin
+     mbx.get(temp);
+     a=temp[1];
+     b=temp[0];
+     vif.a =a;
+     vif.b =b;
+        #10;
+      $display("a=%0b,b=%0b,output c=%0b s=%0b",a,b,vif.c,vif.s);
+     end
+   endtask
+ endclass
+      module tb;
+        inter aif();
+        ha dut(.a(aif.a),.b(aif.b),.c(aif.c),.s(aif.s));
+        generator gen;
+        driver div;
+        mailbox mbx;
+        initial begin
+          gen=new();
+          div=new();
+          mbx=new();
+          gen.mbx=mbx;
+          div.mbx=mbx;
+          div.vif=aif;
+          fork
+            gen.run();
+            div.run();
+          join
+        end
+
+
+ // Code your design here
+module ha(a,b,s,c);
+  input a,b;
+  output s,c;
+  assign s=a^b;
+  assign c=a&b;
+endmodule
+interface inter;
+  logic a;
+  logic b;
+  logic s;
+  logic c;
+endinterface
