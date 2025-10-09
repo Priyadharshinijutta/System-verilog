@@ -1,0 +1,16 @@
+module tb;
+  int a=10;
+  int b=100;
+  initial begin
+    unique if(a==b)
+      $display("a is equal to b");
+    else if(a>b)
+      $display("a is greater than b");
+    else if(a>100)
+      $display("a is greater b");
+    //else
+      //$display("Exit condition");
+  end
+endmodule
+
+# KERNEL: Warning: unique_if_1: testbench.sv(7), scope: tb, time: 0. None of 'if' branches matched.
