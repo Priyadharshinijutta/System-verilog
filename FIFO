@@ -1,0 +1,27 @@
+ class fifo;
+  int intQ[$];
+  function void put(int a);
+    //a=10;
+    intQ.push_back(a);
+    //$display("a=%0d",a);
+  endfunction
+  function void get(output int a);
+   a=intQ.pop_front();
+    //$display("a=%0d",a);
+  endfunction
+ endclass
+   module tb;
+     fifo l=new();
+     int num;
+     initial begin
+       repeat(5) begin
+         num=$urandom_range(100,200);
+         l.put(num);
+         $display("num=%0d",num);
+       end
+       repeat(5) begin
+         l.get(num);
+         $display("num=%0d",num);
+       end
+     end
+       endmodule
